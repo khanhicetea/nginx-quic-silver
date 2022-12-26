@@ -6,16 +6,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: sudo apt update && sudo apt install -y git gcc make autoconf libtool perl
-      - run: mkdir /src
-      - run: cd /src && git clone -b v3.6.1 https://github.com/libressl-portable/portable.git libressl
-      - run: cd /src/libressl && ./autogen.sh && ./configure && make check && make install
+      - run: git clone -b v3.6.1 https://github.com/libressl-portable/portable.git libressl
+      - run: cd libressl && ./autogen.sh && ./configure && make check && make install
       - run: echo "Build libressl done ."
       - run: sudo apt install -y mercurial libperl-dev libpcre3-dev zlib1g-dev libxslt1-dev libgd-ocaml-dev libgeoip-dev
       - run: echo "Start build NGINX"
-      - run: cd /src && hg clone -b quic https://hg.nginx.org/nginx-quic && \
+      - run: hg clone -b quic https://hg.nginx.org/nginx-quic && \
             cd nginx-quic && \
             auto/configure `nginx -V 2>&1 | sed "s/ \-\-/ \\\ \n\t--/g" | grep "\-\-" | grep -ve opt= -e param= -e build=` \
               --with-http_v3_module --with-stream_quic_module \
               --with-debug --build=nginx-quic \
-              --with-cc-opt="-I/src/libressl/build/include" --with-ld-opt="-L/src/libressl/build/lib" --with-ld-opt="-static" && \
+              --with-cc-opt="-I../libressl/build/include" --with-ld-opt="-L../libressl/build/lib" --with-ld-opt="-static" && \
             make
