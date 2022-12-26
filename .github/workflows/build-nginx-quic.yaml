@@ -5,11 +5,11 @@ jobs:
   Build:
     runs-on: ubuntu-latest
     steps:
-      - run: apt update && apt install -y git gcc make autoconf libtool perl
+      - run: sudo apt update && sudo apt install -y git gcc make autoconf libtool perl
       - run: git clone -b v3.6.1 https://github.com/libressl-portable/portable.git libressl && \ |
             cd libressl && \ |
             ./autogen.sh && \ |
             ./configure && \ |
             make check && \ |
-            make install
+            sudo make install
       - run: echo "Build libressl done ."
