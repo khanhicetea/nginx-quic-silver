@@ -1,0 +1,15 @@
+name: Build Nginx Quic
+run-name: ${{ github.actor }} is building Nginx Quic using GitHub Actions 🚀
+on: [push]
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: apt update && apt install -y git gcc make autoconf libtool perl
+      - run: git clone -b v3.6.1 https://github.com/libressl-portable/portable.git libressl && \ |
+            cd libressl && \ |
+            ./autogen.sh && \ |
+            ./configure && \ |
+            make check && \ |
+            make install
+      - run: echo "Build libressl done ."
