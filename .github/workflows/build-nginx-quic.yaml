@@ -31,3 +31,8 @@ jobs:
             make &&
             ls -al &&
             ls -al objs
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        # if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: nginx-quic/objs/nginx
