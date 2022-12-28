@@ -6,14 +6,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: sudo apt update && sudo apt install -y git gcc make autoconf libtool perl
-      - run: git clone -b v3.6.1 https://github.com/libressl-portable/portable.git libressl
-      - run: cd libressl && ./autogen.sh && ./configure && make
-      - run: echo "Build libressl done ."
+      - run: git clone https://github.com/google/boringssl
+      - run: cd boringssl && cmake && make
+      - run: echo "Build boringssl done ."
       - run: sudo apt install -y mercurial libperl-dev libpcre3-dev zlib1g-dev libxslt1-dev libgd-ocaml-dev libgeoip-dev
       - run: echo "Start build NGINX"
       - run: hg clone -b quic https://hg.nginx.org/nginx-quic && 
             cd nginx-quic && 
-            auto/configure
+            ./auto/configure
               --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib/nginx/modules --conf-path=/etc/nginx/nginx.conf
               --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid
               --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp
@@ -27,7 +27,7 @@ jobs:
               --with-stream --with-stream_realip_module --with-stream_ssl_module --with-stream_ssl_preread_module
               --with-http_v3_module --with-stream_quic_module
               --build=nginx-quic
-              --with-cc-opt="-static -I../../libressl/include" --with-ld-opt="-static -L../../libressl/ssl -L../../libressl/crypto" && 
+              --with-cc-opt="-static -I../boringssl/include" --with-ld-opt="-static -L../boringssl/ssl -L../boringssl/crypto" && 
             make &&
             ls -al &&
             ls -al objs
