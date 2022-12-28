@@ -5,34 +5,40 @@ jobs:
   Build:
     runs-on: ubuntu-latest
     steps:
-      - run: sudo apt update && sudo apt install -y git gcc make autoconf libtool perl dpkg-dev uuid-dev cmake golang libunwind-dev unzip
-      - run: git clone https://github.com/google/boringssl
-      - run: cd boringssl && mkdir build && cd build && cmake ../ && make
-      - run: echo "Build boringssl done ."
-      - run: sudo apt install -y mercurial libperl-dev libpcre3-dev zlib1g-dev libxslt1-dev libgd-ocaml-dev libgeoip-dev
-      - run: echo "Start build NGINX"
-      - run: hg clone -b quic https://hg.nginx.org/nginx-quic && 
-            cd nginx-quic && 
-            ./auto/configure
-              --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib/nginx/modules --conf-path=/etc/nginx/nginx.conf
-              --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid
-              --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp
-              --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp
-              --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp
-              --user=nginx --group=nginx --with-compat --with-file-aio --with-threads
-              --with-http_addition_module --with-http_auth_request_module --with-http_dav_module --with-http_flv_module
-              --with-http_gunzip_module --with-http_gzip_static_module --with-http_mp4_module --with-http_random_index_module
-              --with-http_realip_module --with-http_secure_link_module --with-http_slice_module --with-http_ssl_module
-              --with-http_stub_status_module --with-http_sub_module --with-http_v2_module --with-mail --with-mail_ssl_module
-              --with-stream --with-stream_realip_module --with-stream_ssl_module --with-stream_ssl_preread_module
-              --with-http_v3_module --with-stream_quic_module
-              --build=nginx-quic
-              --with-cc-opt="-I../boringssl/include" --with-ld-opt="-static -L../boringssl/build/ssl -L../boringssl/build/crypto" && 
-            make &&
-            ls -al &&
-            ls -al objs
       - name: Release
         uses: softprops/action-gh-release@v1
         # if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: nginx-quic/objs/nginx
+          tag_name: github.ref
+          files: README.md
+      # - run: sudo apt update && sudo apt install -y git gcc make autoconf libtool perl dpkg-dev uuid-dev cmake golang libunwind-dev unzip
+      # - run: git clone https://github.com/google/boringssl
+      # - run: cd boringssl && mkdir build && cd build && cmake ../ && make
+      # - run: echo "Build boringssl done ."
+      # - run: sudo apt install -y mercurial libperl-dev libpcre3-dev zlib1g-dev libxslt1-dev libgd-ocaml-dev libgeoip-dev
+      # - run: echo "Start build NGINX"
+      # - run: hg clone -b quic https://hg.nginx.org/nginx-quic && 
+      #       cd nginx-quic && 
+      #       ./auto/configure
+      #         --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib/nginx/modules --conf-path=/etc/nginx/nginx.conf
+      #         --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid
+      #         --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp
+      #         --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp
+      #         --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp
+      #         --user=nginx --group=nginx --with-compat --with-file-aio --with-threads
+      #         --with-http_addition_module --with-http_auth_request_module --with-http_dav_module --with-http_flv_module
+      #         --with-http_gunzip_module --with-http_gzip_static_module --with-http_mp4_module --with-http_random_index_module
+      #         --with-http_realip_module --with-http_secure_link_module --with-http_slice_module --with-http_ssl_module
+      #         --with-http_stub_status_module --with-http_sub_module --with-http_v2_module --with-mail --with-mail_ssl_module
+      #         --with-stream --with-stream_realip_module --with-stream_ssl_module --with-stream_ssl_preread_module
+      #         --with-http_v3_module --with-stream_quic_module
+      #         --build=nginx-quic
+      #         --with-cc-opt="-I../boringssl/include" --with-ld-opt="-static -L../boringssl/build/ssl -L../boringssl/build/crypto" && 
+      #       make &&
+      #       ls -al &&
+      #       ls -al objs
+      # - name: Release
+      #   uses: softprops/action-gh-release@v1
+      #   # if: startsWith(github.ref, 'refs/tags/')
+      #   with:
+      #     files: nginx-quic/objs/nginx
