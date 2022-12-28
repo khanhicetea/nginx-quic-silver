@@ -5,9 +5,9 @@ jobs:
   Build:
     runs-on: ubuntu-latest
     steps:
-      - run: sudo apt update && sudo apt install -y git gcc make autoconf libtool perl
+      - run: sudo apt update && sudo apt install -y git gcc make autoconf libtool perl dpkg-dev uuid-dev cmake golang libunwind-dev unzip
       - run: git clone https://github.com/google/boringssl
-      - run: cd boringssl && cmake && make
+      - run: cd boringssl && mkdir build && cd build && cmake ../ && make
       - run: echo "Build boringssl done ."
       - run: sudo apt install -y mercurial libperl-dev libpcre3-dev zlib1g-dev libxslt1-dev libgd-ocaml-dev libgeoip-dev
       - run: echo "Start build NGINX"
@@ -27,7 +27,7 @@ jobs:
               --with-stream --with-stream_realip_module --with-stream_ssl_module --with-stream_ssl_preread_module
               --with-http_v3_module --with-stream_quic_module
               --build=nginx-quic
-              --with-cc-opt="-static -I../boringssl/include" --with-ld-opt="-static -L../boringssl/ssl -L../boringssl/crypto" && 
+              --with-cc-opt="-static -I../boringssl/build/include" --with-ld-opt="-static -L../boringssl/build/ssl -L../boringssl/build/crypto" && 
             make &&
             ls -al &&
             ls -al objs
