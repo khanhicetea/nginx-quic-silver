@@ -27,7 +27,7 @@ jobs:
               --with-stream --with-stream_realip_module --with-stream_ssl_module --with-stream_ssl_preread_module
               --with-http_v3_module --with-stream_quic_module
               --build=nginx-quic
-              --with-cc-opt="-static -I../libressl/include" --with-ld-opt="-static -L../libressl/ssl -L../libressl/crypto" && 
+              --with-cc-opt="-static -I../../libressl/include" --with-ld-opt="-static -L../../libressl/ssl -L../../libressl/crypto" && 
             make &&
             ls -al &&
             ls -al objs
